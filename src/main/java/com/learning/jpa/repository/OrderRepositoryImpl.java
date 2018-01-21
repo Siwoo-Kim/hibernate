@@ -21,7 +21,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Cu
     @PersistenceContext
     EntityManager entityManager;
 
-    public OrderRepositoryImpl(Class<?> domainClass) {
+    public OrderRepositoryImpl() {
         super(Order.class);
     }
 

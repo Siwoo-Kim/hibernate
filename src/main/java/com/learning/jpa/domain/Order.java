@@ -33,7 +33,8 @@ public class Order {
     }
 
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL) @Builder.Default
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @Builder.Default
     List<OrderItem> orderItems = new ArrayList<>();
 
     public void addOrderItem(OrderItem orderItem){
@@ -61,12 +62,8 @@ public class Order {
         ORDER , CANCEL;
     }
 
-    private int orderPrice;
-
-    private int count;
-
     public static Order createOrder(Member member,Delivery delivery,OrderItem... orderItems){
-        Order order = new Order();
+        Order order = Order.builder().build();
         //Must use setter to make a bi-relationship
         order.setMember(member);
         order.setDelivery(delivery);
