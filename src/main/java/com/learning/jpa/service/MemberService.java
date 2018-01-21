@@ -11,7 +11,9 @@ public interface MemberService {
 
     Member join(Member member);
 
+    @Transactional(readOnly = true)
     List<Member> getMembers();
 
+    @Transactional(readOnly = true)
     Member getMember(Long id);
 }
