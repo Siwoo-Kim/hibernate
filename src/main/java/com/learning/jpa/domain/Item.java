@@ -28,4 +28,18 @@ public abstract class Item {
 
     @ManyToMany(mappedBy = "items") @Builder.Default
     private List<Category> categories = new ArrayList<>();
+
+    public void addStock(int amount){
+        this.stockQuantity += amount;
+    }
+
+    public void removeStock(int amount){
+        int restStock = this.stockQuantity - amount;
+
+        if(restStock < 0){
+            throw new IllegalStateException("Not enough stock");
+        }
+
+        this.stockQuantity = restStock;
+    }
 }

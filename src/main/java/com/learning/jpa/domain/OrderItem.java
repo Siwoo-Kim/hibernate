@@ -24,4 +24,25 @@ public class OrderItem {
 
     private int count;
 
+    @ManyToOne
+    @JoinColumn(name="ITEM_ID")
+    private Item item;
+
+    public static OrderItem createOrderItem(Item item,int orderPrice,int count){
+        OrderItem orderItem = OrderItem.builder().build();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    public int getTotalPrice(){
+        return getOrderPrice() * getCount();
+    }
 }

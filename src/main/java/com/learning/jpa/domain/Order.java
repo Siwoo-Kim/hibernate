@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter @Setter @ToString(exclude = {"orderItems"}) @Builder
 @NoArgsConstructor @AllArgsConstructor
@@ -62,4 +64,37 @@ public class Order {
     private int orderPrice;
 
     private int count;
+
+    public static Order createOrder(Member member,Delivery delivery,OrderItem... orderItems){
+        Order order = new Order();
+        //Must use setter to make a bi-relationship
+        order.setMember(member);
+        order.setDelivery(delivery);
+
+        Stream.of(orderItems).forEach(orderItem -> order.addOrderItem(orderItem) );
+
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    public void cacnel(){
+        if(delivery.getStatus().equals(Delivery.DeliveryStatus.COMPLETE)){
+            throw new RuntimeException("CANNOT NOT CANCEL ORDER WHICH IS ALREADY SENT");
+        }
+
+        this.setStatus(OrderStatus.CANCEL);
+
+        getOrderItems().stream().forEach(orderItem -> orderItem.cancel());
+    }
+
+    public int getTotalPrice(){
+        int totalPrice = 0;
+
+        for(OrderItem orderItem: getOrderItems()){
+            totalPrice += orderItem.getTotalPrice();
+        }
+
+        return totalPrice;
+    }
 }
