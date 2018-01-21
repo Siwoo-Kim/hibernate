@@ -1,10 +1,13 @@
 package com.learning.jpa.domain;
 
+import com.learning.jpa.domain.embeddable.Address;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter @Setter @ToString @Builder
+@Getter @Setter @ToString(exclude = "orders") @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Entity @Table(name = "MEMBER")
 @SequenceGenerator(name = "MEMBER_SEQ_GENERATOR",
@@ -17,5 +20,11 @@ public class Member {
     private Long id;
 
     private String name;
+
+    @Embedded
+    private Address address;
+
+    @OneToMany(mappedBy = "member") @Builder.Default
+    private List<Order> orders = new ArrayList<>();
 
 }
